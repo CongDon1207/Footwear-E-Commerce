@@ -2,33 +2,48 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
+// Generate UUID v4 style string
+const generateId = () => {
+  return crypto.randomUUID();
+};
+
 const userSchema = new mongoose.Schema(
   {
+    id: {
+      type: String,
+      default: generateId,
+      primaryKey: true,
+    },
     email: {
       type: String,
       required: true,
       unique: true,
       lowercase: true,
       trim: true,
+      maxlength: 255,
     },
     password_hash: {
       type: String,
       required: true,
+      maxlength: 255,
     },
     full_name: {
       type: String,
       required: true,
+      maxlength: 255,
       trim: true,
     },
     role: {
       type: String,
       enum: ['user', 'admin', 'seller'],
       default: 'user',
+      maxlength: 50,
     },
     status: {
       type: String,
       enum: ['active', 'inactive', 'banned'],
       default: 'active',
+      maxlength: 30,
     },
     email_verified_at: {
       type: Date,
@@ -37,13 +52,25 @@ const userSchema = new mongoose.Schema(
     avatar_url: {
       type: String,
       default: null,
+      maxlength: 500,
+    },
+    created_at: {
+      type: Date,
+      default: Date.now,
+    },
+    updated_at: {
+      type: Date,
+      default: Date.now,
     },
   },
   {
-    timestamps: true,
+    timestamps: false, // We manage timestamps manually
     collection: 'users',
   }
 );
+
+// Hash password in controller before saving
+// (Removed middleware to debug)
 
 // Method to compare passwords
 userSchema.methods.comparePassword = async function (password) {
