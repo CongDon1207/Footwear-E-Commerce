@@ -8,6 +8,10 @@ require('dotenv').config();
 const authRoutes = require('./src/routes/authRoutes');
 const userRoutes = require('./src/routes/userRoutes');
 const productRoutes = require('./src/routes/productRoutes');
+const orderRoutes = require('./src/routes/orderRoutes');
+const wishlistRoutes = require('./src/routes/wishlistRoutes');
+const adminRoutes = require('./src/routes/adminRoutes');
+const reviewRoutes = require('./src/routes/reviewRoutes');
 
 // Import middleware
 const errorHandler = require('./src/middleware/errorHandler');
@@ -22,6 +26,7 @@ app.use(cookieParser());
 
 // Static files
 app.use(express.static('public'));
+app.use('/uploads', express.static('uploads'));
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -32,6 +37,10 @@ app.get('/api/health', (req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // 404 handler
 app.use((req, res) => {

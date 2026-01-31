@@ -1,46 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&family=Rubik:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 /* Custom theme configuration for Tailwind v4 */
 @theme {
-  /* Colors */
-  --color-background: #F0F9FF;
+  /* Modern, Light, Bright Color Palette - Teal/Cyan */
+  --color-background: #F0FDFA;
   --color-surface: #FFFFFF;
-  --color-surface-secondary: #F8FAFC;
+  --color-surface-secondary: #F0FDFA;
+  --color-surface-tertiary: #CCFBF1;
   
-  --color-text-primary: #0C4A6E;
+  --color-text-primary: #134E4A;
   --color-text-secondary: #475569;
   --color-text-muted: #64748B;
+  --color-text-inverse: #FFFFFF;
   
-  --color-primary: #0EA5E9;
-  --color-primary-hover: #0284C7;
-  --color-primary-light: #E0F2FE;
+  --color-primary: #0891B2;
+  --color-primary-hover: #0E7490;
+  --color-primary-light: #CFFAFE;
+  --color-primary-dark: #155E75;
+  
+  --color-secondary: #22D3EE;
+  --color-secondary-hover: #06B6D4;
+  --color-secondary-light: #A5F3FC;
   
   --color-cta: #F97316;
   --color-cta-hover: #EA580C;
+  --color-cta-light: #FED7AA;
   
-  --color-success: #059669;
-  --color-error: #DC2626;
+  --color-success: #10B981;
+  --color-success-light: #D1FAE5;
+  
+  --color-error: #EF4444;
+  --color-error-light: #FEE2E2;
+  
   --color-warning: #F59E0B;
+  --color-warning-light: #FEF3C7;
   
-  --color-border: #BAE6FD;
+  --color-border: #99F6E4;
   --color-border-input: #CBD5E1;
+  --color-border-light: #CCFBF1;
   
   /* Font families */
-  --font-heading: 'Outfit', sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Rubik', sans-serif;
+  --font-body: 'Nunito Sans', system-ui, sans-serif;
+  
+  /* Z-index scale */
+  --z-dropdown: 10;
+  --z-sticky: 20;
+  --z-modal-backdrop: 30;
+  --z-modal: 40;
+  --z-navbar: 50;
+  --z-tooltip: 60;
 }
 
 @layer base {
   * {
-    @apply focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/10;
+    @apply focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/40;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Nunito Sans', system-ui, sans-serif;
     font-size: 18px;
-    color: #0C4A6E;
-    background-color: #F0F9FF;
+    font-weight: 400;
+    color: #134E4A;
+    background-color: #F0FDFA;
     margin: 0;
     min-height: 100vh;
     line-height: 1.6;
@@ -49,15 +76,252 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
-    font-weight: 600;
+    font-family: 'Rubik', sans-serif;
+    font-weight: 500;
+    color: #134E4A;
   }
 
   h1 {
-    font-size: clamp(2rem, 5vw, 2.5rem);
+    font-size: clamp(2rem, 5vw, 2.75rem);
+    line-height: 1.2;
   }
 
   h2 {
-    font-size: clamp(1.5rem, 4vw, 1.875rem);
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    line-height: 1.3;
+  }
+
+  h3 {
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    line-height: 1.4;
+  }
+
+  a {
+    color: #0891B2;
+    text-decoration: none;
+    transition: color 200ms ease;
+  }
+
+  a:hover {
+    color: #0E7490;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  /* Selection styling */
+  ::selection {
+    background-color: #A5F3FC;
+    color: #134E4A;
+  }
+}
+
+@layer components {
+  /* Button base styles */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 24px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 12px;
+    border: none;
+    transition: all 200ms ease;
+    cursor: pointer;
+  }
+
+  .btn-primary {
+    background-color: #0891B2;
+    color: #FFFFFF;
+  }
+
+  .btn-primary:hover {
+    background-color: #0E7490;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(8, 145, 178, 0.25);
+  }
+
+  .btn-cta {
+    background-color: #F97316;
+    color: #FFFFFF;
+  }
+
+  .btn-cta:hover {
+    background-color: #EA580C;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(249, 115, 22, 0.25);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #0891B2;
+    border: 2px solid #0891B2;
+  }
+
+  .btn-outline:hover {
+    background-color: #0891B2;
+    color: #FFFFFF;
+  }
+
+  .btn-sm {
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  /* Card styles */
+  .card {
+    background-color: #FFFFFF;
+    border-radius: 16px;
+    border: 1px solid #99F6E4;
+    box-shadow: 0 4px 16px rgba(8, 145, 178, 0.1);
+    transition: box-shadow 200ms ease, transform 200ms ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 8px 24px rgba(8, 145, 178, 0.15);
+    transform: translateY(-2px);
+  }
+
+  /* Input styles */
+  .input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 16px;
+    color: #134E4A;
+    background-color: #FFFFFF;
+    border: 2px solid #CBD5E1;
+    border-radius: 12px;
+    transition: border-color 200ms ease, box-shadow 200ms ease;
+  }
+
+  .input:focus {
+    border-color: #0891B2;
+    box-shadow: 0 0 0 4px rgba(8, 145, 178, 0.1);
+  }
+
+  .input::placeholder {
+    color: #94A3B8;
+  }
+
+  /* Badge styles */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 9999px;
+  }
+
+  .badge-sale {
+    background-color: #F97316;
+    color: #FFFFFF;
+  }
+
+  .badge-new {
+    background-color: #10B981;
+    color: #FFFFFF;
+  }
+
+  .badge-out-of-stock {
+    background-color: #EF4444;
+    color: #FFFFFF;
+  }
+}
+
+@layer utilities {
+  /* Custom utilities */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  /* Container utilities */
+  .container-tight {
+    max-width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .container-wide {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Accessibility: Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

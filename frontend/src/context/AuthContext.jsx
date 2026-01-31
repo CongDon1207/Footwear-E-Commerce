@@ -59,12 +59,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Update user data (after profile edit, avatar change, etc.)
+  const updateUser = (userData) => {
+    setUser((prev) => ({
+      ...prev,
+      ...userData,
+    }));
+  };
+
+  // Refresh user data from server
+  const refreshUser = async () => {
+    try {
+      const { data } = await api.get('/users/profile');
+      setUser(data.user);
+      return data.user;
+    } catch (error) {
+      console.error('Failed to refresh user:', error);
+      throw error;
+    }
+  };
+
   const value = {
     user,
     loading,
     login,
     register,
     logout,
+    updateUser,
+    refreshUser,
     isAuthenticated: !!user,
   };
 
