@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 // Import routes
 const authRoutes = require('./src/routes/authRoutes');
@@ -12,6 +12,7 @@ const orderRoutes = require('./src/routes/orderRoutes');
 const wishlistRoutes = require('./src/routes/wishlistRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const reviewRoutes = require('./src/routes/reviewRoutes');
+const dealRoutes = require('./src/routes/dealRoutes');
 
 // Import middleware
 const errorHandler = require('./src/middleware/errorHandler');
@@ -19,7 +20,7 @@ const errorHandler = require('./src/middleware/errorHandler');
 const app = express();
 
 // Middleware
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -41,6 +42,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/reviews', reviewRoutes);
+app.use('/api/deals', dealRoutes);
 
 // 404 handler
 app.use((req, res) => {

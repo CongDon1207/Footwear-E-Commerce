@@ -9,6 +9,7 @@ const {
   getRecommendations,
 } = require('../controllers/productController');
 const auth = require('../middleware/authMiddleware');
+const { requireAdmin } = require('../middleware/adminMiddleware');
 
 const router = express.Router();
 
@@ -19,8 +20,8 @@ router.get('/:id', getProductById);
 router.get('/:id/recommendations', getRecommendations);
 
 // Protected routes (admin only)
-router.post('/', auth, createProduct);
-router.put('/:id', auth, updateProduct);
-router.delete('/:id', auth, deleteProduct);
+router.post('/', auth, requireAdmin, createProduct);
+router.put('/:id', auth, requireAdmin, updateProduct);
+router.delete('/:id', auth, requireAdmin, deleteProduct);
 
 module.exports = router;

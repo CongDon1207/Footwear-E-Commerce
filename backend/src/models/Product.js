@@ -68,6 +68,10 @@ const productSchema = new mongoose.Schema(
           min: 1,
           max: 5,
         },
+        verified: {
+          type: Boolean,
+          default: false,
+        },
         title: {
           type: String,
           maxlength: 100,

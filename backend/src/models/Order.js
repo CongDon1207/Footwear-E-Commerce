@@ -109,6 +109,29 @@ const statusHistorySchema = new mongoose.Schema({
 });
 
 /**
+ * Payment History Schema - Track payment status changes
+ */
+const paymentHistorySchema = new mongoose.Schema({
+  status: {
+    type: String,
+    enum: ['pending', 'paid', 'failed', 'refunded'],
+    required: true,
+  },
+  note: {
+    type: String,
+    default: '',
+  },
+  updatedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+/**
  * Order Schema
  */
 const orderSchema = new mongoose.Schema(
@@ -161,6 +184,8 @@ const orderSchema = new mongoose.Schema(
       enum: ['pending', 'paid', 'failed', 'refunded'],
       default: 'pending',
     },
+    // Payment history for tracking payment changes
+    paymentHistory: [paymentHistorySchema],
     // Timestamps for status changes
     confirmedAt: Date,
     shippedAt: Date,

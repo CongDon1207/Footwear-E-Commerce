@@ -1,17 +1,19 @@
 const express = require('express');
 const auth = require('../middleware/authMiddleware');
 const { requireAdmin } = require('../middleware/adminMiddleware');
+const { getMetrics } = require('../controllers/admin/adminMetricsController');
 const {
-  getMetrics,
   getAllOrders,
   getOrderById,
   updateOrderStatus,
+  updatePaymentStatus,
+} = require('../controllers/admin/adminOrdersController');
+const {
   getAllProducts,
   updateProduct,
   toggleProductActive,
-  getAllUsers,
-  updateUserStatus,
-} = require('../controllers/adminController');
+} = require('../controllers/admin/adminProductsController');
+const { getAllUsers, updateUserStatus } = require('../controllers/admin/adminUsersController');
 
 const router = express.Router();
 
@@ -26,6 +28,7 @@ router.get('/metrics', getMetrics);
 router.get('/orders', getAllOrders);
 router.get('/orders/:id', getOrderById);
 router.patch('/orders/:id/status', updateOrderStatus);
+router.patch('/orders/:id/payment-status', updatePaymentStatus);
 
 // Products
 router.get('/products', getAllProducts);

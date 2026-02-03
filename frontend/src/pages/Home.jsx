@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Layout } from '../components/layout';
 import { ProductGridSkeleton } from '../components/ui/Skeleton';
 import RecentlyViewed from '../components/products/RecentlyViewed';
+import FlashDeals from '../components/deals/FlashDeals';
 import api from '../services/api';
 import {
   ArrowRight,
@@ -132,6 +133,9 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Flash Deals Section */}
+      <FlashDeals limit={4} />
 
       {/* Shop by Category */}
       <section className="py-16">

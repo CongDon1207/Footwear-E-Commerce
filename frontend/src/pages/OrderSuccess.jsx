@@ -52,19 +52,57 @@ const OrderSuccess = () => {
                   </span>
                 </div>
                 <div className="flex justify-between">
+                  <span className="text-text-secondary">Payment</span>
+                  <span className="font-medium text-text-primary capitalize">
+                    {order.paymentMethod === 'cod'
+                      ? 'Cash on Delivery'
+                      : order.paymentMethod}
+                  </span>
+                </div>
+                <div className="flex justify-between">
                   <span className="text-text-secondary">Total Amount</span>
                   <span className="font-bold text-text-primary">
                     {formatPrice(order.total)}
                   </span>
                 </div>
               </div>
+
+              {order.payment?.method === 'bank_transfer' && order.paymentStatus === 'pending' && (
+                <div className="mt-6 p-4 bg-primary-light rounded-md">
+                  <p className="text-sm font-medium text-text-primary mb-3">
+                    Bank Transfer Instructions
+                  </p>
+                  {order.payment.bank ? (
+                    <div className="space-y-1 text-sm text-text-secondary">
+                      <p>
+                        <span className="text-text-muted">Bank:</span> {order.payment.bank.name}
+                      </p>
+                      <p>
+                        <span className="text-text-muted">Account Name:</span> {order.payment.bank.accountName}
+                      </p>
+                      <p>
+                        <span className="text-text-muted">Account Number:</span> {order.payment.bank.accountNumber}
+                      </p>
+                      <p className="pt-2">
+                        <span className="text-text-muted">Transfer Note:</span>{' '}
+                        <span className="font-semibold text-text-primary">
+                          {order.payment.transferNote || orderNumber}
+                        </span>
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-sm text-text-secondary">
+                      Bank details are not available. Please check Order Details or contact support.
+                    </p>
+                  )}
+                </div>
+              )}
             </>
           )}
 
           <div className="mt-6 p-4 bg-surface-secondary rounded-md">
             <p className="text-sm text-text-secondary">
-              We've sent a confirmation email with your order details. You can track 
-              your order status in your account.
+              You can track your order status and payment updates in your account.
             </p>
           </div>
         </div>

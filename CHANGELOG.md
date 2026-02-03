@@ -5,12 +5,25 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
+- 2026-02-03: Fix deals admin middleware usage at `backend/src/routes/dealRoutes.js` - use `requireAdmin` function to prevent router handler errors (completed).
+- 2026-02-03: Silence dotenv injection logs at `backend/server.js` - use `dotenv.config({ quiet: true })` (completed).
+- 2026-02-02: Fix product write authorization at `backend/src/routes/productRoutes.js` - admin-only create/update/delete (completed).
+- 2026-02-02: Align admin orders search/pagination at `backend/src/controllers/admin/adminOrdersController.js` - support `search` and legacy `orderNumber` alias (completed).
+- 2026-02-02: Refactor admin controllers at `backend/src/controllers/admin/*` - keep files under 300 LOC (completed).
+- 2026-02-02: Refactor checkout and order detail pages at `frontend/src/pages/checkout/*` and `frontend/src/pages/orders/detail/*` - keep files under 300 LOC (completed).
+- 2026-02-02: Update order success copy and bank transfer instructions at `frontend/src/pages/OrderSuccess.jsx` - remove unimplemented email claim (completed).
 - 2026-01-31: Update typography from Varela Round to Rubik for better e-commerce readability at `frontend/src/index.css` - improved heading weights and font rendering
 - 2026-01-31: Change focus ring opacity from 20% to 40% at `frontend/src/index.css` - better keyboard navigation visibility
 - 2026-01-31: Fix CSS transitions to use specific properties instead of `all` at `frontend/src/index.css` - improved performance
 - 2026-01-31: Fix pagination button touch targets from 40px to 44px at `frontend/src/pages/Products.jsx` - better mobile accessibility
 
 ### Added
+- 2026-02-02: Add payment history tracking at `backend/src/models/Order.js` - audit payment status changes (completed).
+- 2026-02-02: Add admin payment status update endpoint at `backend/src/controllers/admin/adminOrdersController.js` - `PATCH /api/admin/orders/:id/payment-status` (completed).
+- 2026-02-02: Add bank transfer response payload at `backend/src/controllers/orderController.js` - return bank details + transfer note when available (completed).
+- 2026-02-02: Add verified review flag at `backend/src/models/Product.js` - persist verified purchase indicator (completed).
+- 2026-02-02: Add review controllers split at `backend/src/controllers/reviews/*` - fix delivered purchase verification and keep files under 300 LOC (completed).
+- 2026-02-02: Add admin orders payment update UI at `frontend/src/pages/admin/orders/*` - update payment status from dashboard (completed).
 - 2026-01-31: Add OrderDetail page at `frontend/src/pages/OrderDetail.jsx` - order tracking with progress steps, status timeline, shipping/payment info
 - 2026-01-31: Add AdminProtectedRoute at `frontend/src/components/AdminProtectedRoute.jsx` - role-based route protection for admin pages
 - 2026-01-31: Add Admin Dashboard at `frontend/src/pages/admin/AdminDashboard.jsx` - metrics overview with revenue, orders, products, users stats
