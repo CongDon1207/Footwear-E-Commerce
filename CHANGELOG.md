@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
+- 2026-02-05: Remove redundant wrappers/docs/temp files at `frontend/src/pages/*`, `backend/*.md`, and cleanup paths - reduce repository noise without runtime behavior changes (completed).
 - 2026-02-03: Fix deals admin middleware usage at `backend/src/routes/dealRoutes.js` - use `requireAdmin` function to prevent router handler errors (completed).
 - 2026-02-03: Silence dotenv injection logs at `backend/server.js` - use `dotenv.config({ quiet: true })` (completed).
 - 2026-02-02: Fix product write authorization at `backend/src/routes/productRoutes.js` - admin-only create/update/delete (completed).

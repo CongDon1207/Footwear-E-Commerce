@@ -14,10 +14,10 @@ import Profile from './pages/Profile';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
+import Checkout from './pages/checkout/Checkout';
 import OrderSuccess from './pages/OrderSuccess';
 import Orders from './pages/Orders';
-import OrderDetail from './pages/OrderDetail';
+import OrderDetail from './pages/orders/detail/OrderDetail';
 import Wishlist from './pages/Wishlist';
 
 // Admin Pages
