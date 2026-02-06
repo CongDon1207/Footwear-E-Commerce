@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getAdminRedirectPath } from '../utils/routeGuards';
 
 /**
  * AdminProtectedRoute - Protects routes that require admin role
@@ -7,6 +8,11 @@ import { useAuth } from '../context/AuthContext';
  */
 export default function AdminProtectedRoute({ children }) {
   const { user, isAuthenticated, loading } = useAuth();
+  const redirectPath = getAdminRedirectPath({
+    isAuthenticated,
+    loading,
+    role: user?.role,
+  });
 
   if (loading) {
     return (
@@ -18,16 +24,5 @@ export default function AdminProtectedRoute({ children }) {
       </div>
     );
   }
-
-  // Not authenticated - redirect to login
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-
-  // Not admin - redirect to home
-  if (user?.role !== 'admin') {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
+  return redirectPath ? <Navigate to={redirectPath} replace /> : children;
 }

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../../services/api';
 import {
   Search,
@@ -27,6 +27,7 @@ export default function AdminProducts() {
   const [activeFilter, setActiveFilter] = useState('');
   const [search, setSearch] = useState('');
   const [toggling, setToggling] = useState(null);
+  const searchRef = useRef(search);
 
   // Edit modal
   const [editProduct, setEditProduct] = useState(null);
@@ -42,7 +43,7 @@ export default function AdminProducts() {
   };
 
   // Fetch products
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -51,7 +52,7 @@ export default function AdminProducts() {
         limit: '10',
       });
       if (activeFilter) params.append('active', activeFilter);
-      if (search) params.append('search', search);
+      if (searchRef.current) params.append('search', searchRef.current);
 
       const { data } = await api.get(`/admin/products?${params}`);
       setProducts(data.products);
@@ -62,17 +63,23 @@ export default function AdminProducts() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [activeFilter, page]);
+
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
 
   useEffect(() => {
     fetchProducts();
-  }, [page, activeFilter]);
+  }, [fetchProducts]);
 
   // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
-    fetchProducts();
+    if (page === 1) {
+      fetchProducts();
+    }
   };
 
   // Toggle product active status

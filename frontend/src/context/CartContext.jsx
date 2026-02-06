@@ -1,8 +1,22 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { updateCartItems } from '../utils/cartUtils';
 
 const CartContext = createContext(null);
 
 const CART_STORAGE_KEY = 'footwear_cart';
+
+const loadStoredCart = () => {
+  try {
+    const savedCart = localStorage.getItem(CART_STORAGE_KEY);
+    if (!savedCart) return [];
+
+    const parsedCart = JSON.parse(savedCart);
+    return Array.isArray(parsedCart) ? parsedCart : [];
+  } catch (error) {
+    console.error('Failed to load cart from localStorage:', error);
+    return [];
+  }
+};
 
 export const useCart = () => {
   const context = useContext(CartContext);
@@ -28,35 +42,16 @@ export const useCart = () => {
  */
 
 export const CartProvider = ({ children }) => {
-  const [items, setItems] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load cart from localStorage on mount
-  useEffect(() => {
-    try {
-      const savedCart = localStorage.getItem(CART_STORAGE_KEY);
-      if (savedCart) {
-        const parsedCart = JSON.parse(savedCart);
-        if (Array.isArray(parsedCart)) {
-          setItems(parsedCart);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load cart from localStorage:', error);
-    }
-    setIsLoaded(true);
-  }, []);
+  const [items, setItems] = useState(() => loadStoredCart());
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    if (isLoaded) {
-      try {
-        localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
-      } catch (error) {
-        console.error('Failed to save cart to localStorage:', error);
-      }
+    try {
+      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+    } catch (error) {
+      console.error('Failed to save cart to localStorage:', error);
     }
-  }, [items, isLoaded]);
+  }, [items]);
 
   // Add item to cart
   const addItem = useCallback((product, size, quantity = 1) => {
@@ -105,26 +100,6 @@ export const CartProvider = ({ children }) => {
     return true;
   }, []);
 
-  // Update item quantity
-  const updateQuantity = useCallback((productId, size, quantity) => {
-    if (quantity < 1) {
-      removeItem(productId, size);
-      return;
-    }
-
-    setItems((prevItems) =>
-      prevItems.map((item) => {
-        if (item.productId === productId && item.size === size) {
-          return {
-            ...item,
-            quantity: Math.min(quantity, item.stock),
-          };
-        }
-        return item;
-      })
-    );
-  }, []);
-
   // Remove item from cart
   const removeItem = useCallback((productId, size) => {
     setItems((prevItems) =>
@@ -132,6 +107,11 @@ export const CartProvider = ({ children }) => {
         (item) => !(item.productId === productId && item.size === size)
       )
     );
+  }, []);
+
+  // Update item quantity
+  const updateQuantity = useCallback((productId, size, quantity) => {
+    setItems((prevItems) => updateCartItems(prevItems, productId, size, quantity));
   }, []);
 
   // Clear entire cart
@@ -181,7 +161,7 @@ export const CartProvider = ({ children }) => {
     subtotal,
     shippingFee,
     total,
-    isLoaded,
+    isLoaded: true,
     addItem,
     updateQuantity,
     removeItem,

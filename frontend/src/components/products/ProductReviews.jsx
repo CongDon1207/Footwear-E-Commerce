@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import {
   Star,
   MessageSquare,
-  ThumbsUp,
   User,
   Loader2,
   AlertCircle,
@@ -20,13 +19,12 @@ import {
  * Displays reviews and allows authenticated users to add reviews
  */
 const ProductReviews = ({ productId }) => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   // State
   const [reviews, setReviews] = useState([]);
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // Review form state
   const [showForm, setShowForm] = useState(false);
@@ -49,9 +47,9 @@ const ProductReviews = ({ productId }) => {
   const [hasMore, setHasMore] = useState(false);
 
   // Fetch reviews
-  const fetchReviews = async (resetPage = false) => {
+  const fetchReviews = useCallback(async (resetPage = false, pageOverride = null) => {
     try {
-      const currentPage = resetPage ? 1 : page;
+      const currentPage = resetPage ? 1 : pageOverride ?? page;
       const { data } = await api.get(
         `/reviews/products/${productId}?page=${currentPage}&limit=5&sortBy=${sortBy}`
       );
@@ -67,14 +65,13 @@ const ProductReviews = ({ productId }) => {
       setHasMore(data.pagination.page < data.pagination.pages);
     } catch (err) {
       console.error('Failed to fetch reviews:', err);
-      setError('Failed to load reviews');
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, productId, sortBy]);
 
   // Check if user can review
-  const checkCanReview = async () => {
+  const checkCanReview = useCallback(async () => {
     if (!isAuthenticated) return;
     
     try {
@@ -87,15 +84,15 @@ const ProductReviews = ({ productId }) => {
     } catch (err) {
       console.error('Failed to check review status:', err);
     }
-  };
+  }, [isAuthenticated, productId]);
 
   useEffect(() => {
     fetchReviews(true);
-  }, [productId, sortBy]);
+  }, [fetchReviews]);
 
   useEffect(() => {
     checkCanReview();
-  }, [productId, isAuthenticated]);
+  }, [checkCanReview]);
 
   // Handle submit review
   const handleSubmit = async (e) => {
@@ -485,8 +482,9 @@ const ProductReviews = ({ productId }) => {
         <div className="text-center mt-6">
           <button
             onClick={() => {
-              setPage((prev) => prev + 1);
-              fetchReviews();
+              const nextPage = page + 1;
+              setPage(nextPage);
+              fetchReviews(false, nextPage);
             }}
             className="btn btn-outline"
           >

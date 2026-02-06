@@ -13,7 +13,6 @@ const Products = () => {
   const [pagination, setPagination] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { isInWishlist, toggleWishlist } = useWishlist();
 
   // Get filters from URL

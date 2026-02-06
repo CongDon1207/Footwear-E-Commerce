@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 const Wishlist = () => {
-  const { items, loading, isLoaded, removeFromWishlist, clearWishlist } = useWishlist();
+  const { items, isLoaded, removeFromWishlist, clearWishlist } = useWishlist();
   const { addItem } = useCart();
   const { isAuthenticated } = useAuth();
   const [addingToCart, setAddingToCart] = useState({});
@@ -34,7 +34,7 @@ const Wishlist = () => {
     setAddingToCart((prev) => ({ ...prev, [product._id]: true }));
 
     // Add to cart
-    const success = addItem(product, availableSize.size, 1);
+    addItem(product, availableSize.size, 1);
 
     // Brief delay for feedback
     await new Promise((r) => setTimeout(r, 300));

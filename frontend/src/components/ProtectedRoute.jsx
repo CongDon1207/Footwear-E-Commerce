@@ -1,8 +1,10 @@
 import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { getProtectedRedirectPath } from '../utils/routeGuards';
 
 export default function ProtectedRoute({ children }) {
   const { isAuthenticated, loading } = useAuth();
+  const redirectPath = getProtectedRedirectPath({ isAuthenticated, loading });
 
   if (loading) {
     return (
@@ -15,5 +17,5 @@ export default function ProtectedRoute({ children }) {
     );
   }
 
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
+  return redirectPath ? <Navigate to={redirectPath} replace /> : children;
 }

@@ -3,40 +3,34 @@ import { useState, useEffect, useCallback } from 'react';
 const STORAGE_KEY = 'footwear_recently_viewed';
 const MAX_ITEMS = 20;
 
+const loadStoredItems = () => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (!stored) return [];
+
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.error('Failed to load recently viewed:', error);
+    return [];
+  }
+};
+
 /**
  * Hook to track and retrieve recently viewed products
  * Stores minimal product data in localStorage
  */
 export const useRecentlyViewed = () => {
-  const [items, setItems] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  // Load from localStorage on mount
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setItems(parsed);
-        }
-      }
-    } catch (error) {
-      console.error('Failed to load recently viewed:', error);
-    }
-    setIsLoaded(true);
-  }, []);
+  const [items, setItems] = useState(() => loadStoredItems());
 
   // Save to localStorage whenever items change
   useEffect(() => {
-    if (isLoaded) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-      } catch (error) {
-        console.error('Failed to save recently viewed:', error);
-      }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    } catch (error) {
+      console.error('Failed to save recently viewed:', error);
     }
-  }, [items, isLoaded]);
+  }, [items]);
 
   /**
    * Add a product to recently viewed
@@ -95,7 +89,7 @@ export const useRecentlyViewed = () => {
 
   return {
     items,
-    isLoaded,
+    isLoaded: true,
     addProduct,
     removeProduct,
     clearAll,

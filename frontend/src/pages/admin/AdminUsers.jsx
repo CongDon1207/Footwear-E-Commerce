@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import api from '../../services/api';
 import {
   Search,
@@ -34,6 +34,7 @@ export default function AdminUsers() {
   const [roleFilter, setRoleFilter] = useState('');
   const [search, setSearch] = useState('');
   const [toggling, setToggling] = useState(null);
+  const searchRef = useRef(search);
 
   // Format date
   const formatDate = (dateString) => {
@@ -45,7 +46,7 @@ export default function AdminUsers() {
   };
 
   // Fetch users
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
@@ -55,7 +56,7 @@ export default function AdminUsers() {
       });
       if (statusFilter) params.append('status', statusFilter);
       if (roleFilter) params.append('role', roleFilter);
-      if (search) params.append('search', search);
+      if (searchRef.current) params.append('search', searchRef.current);
 
       const { data } = await api.get(`/admin/users?${params}`);
       setUsers(data.users);
@@ -66,17 +67,23 @@ export default function AdminUsers() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, roleFilter, statusFilter]);
+
+  useEffect(() => {
+    searchRef.current = search;
+  }, [search]);
 
   useEffect(() => {
     fetchUsers();
-  }, [page, statusFilter, roleFilter]);
+  }, [fetchUsers]);
 
   // Handle search
   const handleSearch = (e) => {
     e.preventDefault();
     setPage(1);
-    fetchUsers();
+    if (page === 1) {
+      fetchUsers();
+    }
   };
 
   // Toggle user status

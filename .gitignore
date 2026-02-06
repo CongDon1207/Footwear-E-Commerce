@@ -71,4 +71,6 @@ temp/
 
 .codex
 .opencode
-.github
+.github/*
+!.github/workflows/
+!.github/workflows/ci.yml

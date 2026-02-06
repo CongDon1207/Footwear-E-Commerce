@@ -1,0 +1,10 @@
+{
+  "name": "footwear-ecommerce-workspace",
+  "private": true,
+  "scripts": {
+    "lint": "npm --prefix backend run lint && npm --prefix frontend run lint",
+    "test": "npm --prefix backend run test && npm --prefix frontend run test:smoke",
+    "build": "npm --prefix frontend run build",
+    "check": "npm run lint && npm run test && npm run build"
+  }
+}

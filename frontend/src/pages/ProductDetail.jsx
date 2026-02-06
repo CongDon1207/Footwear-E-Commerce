@@ -26,7 +26,7 @@ import {
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addItem, isInCart, getItemQuantity } = useCart();
+  const { addItem } = useCart();
   const { isInWishlist, toggleWishlist } = useWishlist();
   const { addProduct: addToRecentlyViewed } = useRecentlyViewed();
 

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
+- 2026-02-06: Expand stability quality gates at `.github/workflows/ci.yml`, `backend/scripts/*`, and `frontend/scripts/test-smoke.js` - split CI into parallel lint/test/build jobs and extend critical-path smoke coverage without API contract changes (completed).
+- 2026-02-06: Fix duplicate Mongoose model indexes at `backend/src/models/Order.js` and `backend/src/models/RefreshToken.js` - remove redundant index definitions to silence startup warnings without changing API behavior (completed).
+- 2026-02-06: Implement stability baseline at root/backend/frontend paths - add quality scripts, CI checks, smoke/critical test runners, and split `Profile`/`Dashboard` into smaller page modules (completed).
+- 2026-02-06: Add project structure index at `docs/structure.md` - provide source-of-truth map for faster task navigation (completed).
 - 2026-02-05: Remove redundant wrappers/docs/temp files at `frontend/src/pages/*`, `backend/*.md`, and cleanup paths - reduce repository noise without runtime behavior changes (completed).
 - 2026-02-03: Fix deals admin middleware usage at `backend/src/routes/dealRoutes.js` - use `requireAdmin` function to prevent router handler errors (completed).
 - 2026-02-03: Silence dotenv injection logs at `backend/server.js` - use `dotenv.config({ quiet: true })` (completed).
